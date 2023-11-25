@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'movies.apps.MoviesConfig',
+
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
