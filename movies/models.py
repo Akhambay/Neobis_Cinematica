@@ -18,7 +18,7 @@ class MovieTheatre(models.Model):
         verbose_name_plural = "Кинотеатры"
 
 
-class Movie(models.Model):
+class Movies(models.Model):
     genre_choice = (
         ('comedy', 'comedy'),
         ('animation', 'animation'),
@@ -46,7 +46,7 @@ class ShowTimes(models.Model):
     start_session = models.TimeField()
     end_session = models.TimeField()
     cinema = models.ForeignKey(MovieTheatre, on_delete=models.CASCADE)
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movies, on_delete=models.CASCADE)
     # rooms = models.ForeignKey(Room, on_delete=models.CASCADE)
 
     def __str__(self):
