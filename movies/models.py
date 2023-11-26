@@ -110,3 +110,17 @@ class Ticket(models.Model):
         # self.movie = Movies.objects.filter(id=self.cinema.id)
         self.total_amount = self.showtime.price * self.quantity
         super().save(*args, **kwargs)
+
+
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback = models.TextField(max_length=200)
+    posted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Feedback author: {self.user.username}'
+
+    class Meta:
+        ordering = ['-posted_at']
+        verbose_name = "Обратная связь"
+        verbose_name_plural = "Обратные связи"

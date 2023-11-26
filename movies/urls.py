@@ -12,4 +12,7 @@ urlpatterns = [
     path('tickets/', views.TicketsList.as_view()),
     path('tickets/<int:pk>/',
          views.TicketsDetail.as_view()),
+    path('feedbacks/', views.FeedbacksList.as_view()),
+    path('feedbacks/<int:pk>/',
+         views.FeedbacksDetail.as_view()),
 ]

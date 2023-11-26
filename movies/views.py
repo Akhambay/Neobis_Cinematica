@@ -1,8 +1,6 @@
 from rest_framework import generics
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import MovieTheatre, Movies, ShowTimes, Ticket
-from .serializers import MovieTheatreSerializers, MoviesSerializers, ShowTimesSerializers, TicketSerializers, SeatSerializers
+from .models import MovieTheatre, Movies, ShowTimes, Ticket, Feedback
+from .serializers import MovieTheatreSerializers, MoviesSerializers, ShowTimesSerializers, TicketSerializers, FeedbackSerializers
 
 
 class MovieTheatreList(generics.ListCreateAPIView):
@@ -45,19 +43,11 @@ class TicketsDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TicketSerializers
 
 
-@api_view(['POST'])
-def calculate_total_price(request):
-    data = request.data
-    showtime_id = data.get('showtime_id', [])
-    quantities = data.get('quantities', [])
+class FeedbacksList(generics.ListCreateAPIView):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializers
 
-    total_price = 0
 
-    for showtime_id, quantity in zip(showtime_id, quantities):
-        try:
-            showtime = ShowTimes.objects.get(pk=showtime_id)
-            total_price += showtime.price * quantity
-        except ShowTimes.DoesNotExist:
-            return Response({'error': f'Showtime with id {showtime_id} not found'}, status=404)
-
-    return Response({'total_price': total_price})
+class FeedbacksDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializers
