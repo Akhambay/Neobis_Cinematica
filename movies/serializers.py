@@ -38,7 +38,7 @@ class TicketSerializers(ModelSerializer):
     class Meta:
         model = Ticket
         fields = ['id', 'user', 'cinema', 'movie', 'showtime', 'room', 'seat',
-                  'quantity', 'total_amount']
+                  'quantity', 'payment_method', 'total_amount']
 
 
 class FeedbackSerializers(ModelSerializer):

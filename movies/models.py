@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from accounts.models import CustomUser as User
+import decimal
 
 
 class MovieTheatre(models.Model):
@@ -93,22 +94,31 @@ class Seat(models.Model):
 
 
 class Ticket(models.Model):
+    payment_choice = (
+        ('debit card', 'debit card'),
+        ('cash', 'cash'),
+        ('Kaspi QR', 'Kaspi QR'),
+    )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cinema = models.ForeignKey(MovieTheatre, on_delete=models.CASCADE)
     movie = models.ForeignKey(Movies, on_delete=models.CASCADE)
     showtime = models.ForeignKey(ShowTimes, on_delete=models.CASCADE)
+    payment_method = models.CharField(max_length=15, choices=payment_choice)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     total_amount = models.DecimalField(
-        max_digits=10, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=3, blank=True, null=True)
 
     def __str__(self):
         return f'Ticket ID: {self.id}'
 
     def save(self, *args, **kwargs):
-        # self.movie = Movies.objects.filter(id=self.cinema.id)
         self.total_amount = self.showtime.price * self.quantity
+        if self.payment_method == 'debit card':
+            discount = decimal.Decimal('0.03')
+            self.total_amount = decimal.Decimal(
+                self.total_amount) * (1 - discount)
         super().save(*args, **kwargs)
 
 
