@@ -9,4 +9,7 @@ urlpatterns = [
     path('showtimes/', views.ShowTimesList.as_view()),
     path('showtimes/<int:pk>/',
          views.ShowTimesDetail.as_view()),
+    path('tickets/', views.TicketsList.as_view()),
+    path('tickets/<int:pk>/',
+         views.TicketsDetail.as_view()),
 ]

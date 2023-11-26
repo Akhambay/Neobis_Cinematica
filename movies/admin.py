@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import MovieTheatre, Movies, ShowTimes, Room
+from .models import MovieTheatre, Movies, ShowTimes, Room, Seat
 
 admin.site.register(MovieTheatre)
 admin.site.register(Movies)
 admin.site.register(ShowTimes)
 admin.site.register(Room)
-# admin.site.register(Seat)
+admin.site.register(Seat)
