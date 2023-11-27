@@ -15,7 +15,4 @@ urlpatterns = [
     path('feedbacks/', views.FeedbacksList.as_view()),
     path('feedbacks/<int:pk>/',
          views.FeedbacksDetail.as_view()),
-    path('purchase_history/', views.PurchaseHistoryList.as_view()),
-    path('purchase_history/<int:pk>/',
-         views.PurchaseHistoryDetail.as_view()),
 ]

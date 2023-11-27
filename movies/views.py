@@ -1,8 +1,6 @@
 from rest_framework import generics
-from rest_framework import viewsets
-from .models import MovieTheatre, Movies, ShowTimes, Ticket, Feedback, PurchaseHistory
-from .serializers import (MovieTheatreSerializers, MoviesSerializers, ShowTimesSerializers,
-                          TicketSerializers, FeedbackSerializers, PurchaseHistorySerializers)
+from .models import MovieTheatre, Movies, ShowTimes, Ticket, Feedback
+from .serializers import MovieTheatreSerializers, MoviesSerializers, ShowTimesSerializers, TicketSerializers, FeedbackSerializers
 
 
 class MovieTheatreList(generics.ListCreateAPIView):
@@ -53,13 +51,3 @@ class FeedbacksList(generics.ListCreateAPIView):
 class FeedbacksDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializers
-
-
-class PurchaseHistoryList(generics.ListCreateAPIView):
-    queryset = PurchaseHistory.objects.all()
-    serializer_class = PurchaseHistorySerializers
-
-
-class PurchaseHistoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = PurchaseHistory.objects.all()
-    serializer_class = PurchaseHistorySerializers
