@@ -13,7 +13,7 @@ class MovieTheatre(models.Model):
     end_time = models.TimeField()
 
     def __str__(self):
-        return f"{self.title} - {self.city}"
+        return f"{self.title}"
 
     class Meta:
         verbose_name = "Кинотеатр"
@@ -38,7 +38,7 @@ class Movies(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.title} - {self.genre}"
+        return f"{self.title} ({self.genre})"
 
     class Meta:
         verbose_name = "Фильм"
@@ -72,7 +72,7 @@ class ShowTimes(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.start_session} - {self.price} KZT"
+        return f"{self.cinema} - {self.movie} | {self.room} {self.start_session} - {self.price} KZT"
 
     class Meta:
         verbose_name = "Сеанс"
@@ -109,6 +109,7 @@ class Ticket(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     total_amount = models.DecimalField(
         max_digits=10, decimal_places=3, blank=True, null=True)
+    purchase_date = models.DateTimeField(auto_created=True)
 
     def __str__(self):
         return f'Ticket ID: {self.id}'
@@ -117,8 +118,10 @@ class Ticket(models.Model):
         self.total_amount = self.showtime.price * self.quantity
         if self.payment_method == 'debit card':
             discount = decimal.Decimal('0.03')
-            self.total_amount = decimal.Decimal(
-                self.total_amount) * (1 - discount)
+        else:
+            discount = decimal.Decimal('0.00')
+        self.total_amount = decimal.Decimal(
+            self.total_amount) * (1 - discount)
         super().save(*args, **kwargs)
 
 
@@ -132,5 +135,24 @@ class Feedback(models.Model):
 
     class Meta:
         ordering = ['-posted_at']
+        verbose_name = "Обратная связь"
+        verbose_name_plural = "Обратные связи"
+
+
+class PurchaseHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    purchase_date = models.DateTimeField(auto_created=True)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'Purchase history of {self.user.username}'
+
+    def save(self, *args, **kwargs):
+        self.total_amount = Ticket.total_amount
+        self.purchase_date = Ticket.purchase_date
+        super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ['-purchase_date']
         verbose_name = "Обратная связь"
         verbose_name_plural = "Обратные связи"
